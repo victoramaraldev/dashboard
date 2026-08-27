@@ -3,12 +3,32 @@ import { ref } from "vue";
 
 const dataInicial = ref("");
 const dataFinal = ref("");
+const status = ref<string | null>(null);
 const filtroSelecionado = ref<string | null>(null);
 
 const opcoesFiltros = [
   {
     title: "Data",
     value: "DATE",
+  },
+  {
+    title: "Status",
+    value: "STATUS",
+  },
+];
+
+const opcoesStatus = [
+  {
+    title: "Faturado",
+    value: "Faturado",
+  },
+  {
+    title: "Pendente",
+    value: "Pendente",
+  },
+  {
+    title: "Cancelado",
+    value: "Cancelado",
   },
 ];
 
@@ -18,6 +38,7 @@ const emit = defineEmits<{
     filtros: {
       dataInicial: string;
       dataFinal: string;
+      status: string | null;
     },
   ): void;
 }>();
@@ -26,6 +47,7 @@ function aplicarFiltros() {
   emit("aplicar-filtros", {
     dataInicial: dataInicial.value,
     dataFinal: dataFinal.value,
+    status: status.value,
   });
 }
 
@@ -33,17 +55,14 @@ function limparFiltros() {
   dataInicial.value = "";
   dataFinal.value = "";
   filtroSelecionado.value = null;
+  status.value = null;
 
   emit("aplicar-filtros", {
     dataInicial: "",
     dataFinal: "",
+    status: null,
   });
 }
-
-emit("aplicar-filtros", {
-  dataInicial: "",
-  dataFinal: "",
-});
 </script>
 
 <template>
@@ -87,6 +106,18 @@ emit("aplicar-filtros", {
             />
           </v-col>
         </template>
+
+        <v-col v-if="filtroSelecionado === 'STATUS'" cols="12" md="3">
+          <v-select
+            v-model="status"
+            :items="opcoesStatus"
+            label="Status"
+            variant="outlined"
+            density="comfortable"
+            hide-details
+            clearable
+          />
+        </v-col>
 
         <v-col
           cols="12"

@@ -4,6 +4,7 @@ import type { DashboardData } from "@/types/dashboard.types";
 type DateFilter = {
   dataInicial: string;
   dataFinal: string;
+  status: string | null;
 };
 
 export function getDashboardData(filtros?: DateFilter): Promise<DashboardData> {
@@ -22,6 +23,12 @@ export function getDashboardData(filtros?: DateFilter): Promise<DashboardData> {
             !filtros.dataFinal || order.date <= filtros.dataFinal;
 
           return depoisDaInicial && antesDaFinal;
+        });
+      }
+
+      if (filtros?.status) {
+        data.recentOrders = data.recentOrders.filter((order) => {
+          return order.status === filtros.status;
         });
       }
 
