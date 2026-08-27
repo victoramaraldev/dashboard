@@ -29,17 +29,19 @@ const formattedUpdate = computed(
     }) ?? "—",
 );
 
+const activeFilters = ref<DashboardFilters>({
+  startDate: "",
+  endDate: "",
+  status: null,
+});
+
 async function applyFilters(filtros: DashboardFilters) {
   await loadDashboard(filtros);
 }
 
 async function applyStatusFilter(status: OrderStatusName | null) {
-  const filtros: DashboardFilters = {
-    startDate: "",
-    endDate: "",
-    status,
-  };
-  await loadDashboard(filtros);
+  activeFilters.value = { ...activeFilters.value, status };
+  await loadDashboard(activeFilters.value);
 }
 
 async function loadDashboard(filtros?: DashboardFilters) {

@@ -9,6 +9,8 @@ const emit = defineEmits<{
   statusSelected: [status: OrderStatusName | null];
 }>();
 
+const selectedStatus = ref<OrderStatusName | null>(null);
+
 const labels = ref(props.data.map((item) => item.status));
 
 const chartOptions = computed<ApexOptions>(() => ({
@@ -16,10 +18,16 @@ const chartOptions = computed<ApexOptions>(() => ({
     fontFamily: "Roboto, sans-serif",
     events: {
       dataPointSelection: (_event, _chartContext, config) => {
-        const selectedStatus = config
-          ? props.data[config.dataPointIndex].status
+        const clickedStatus = config
+          ? props.data[config.dataPointIndex]?.status
           : null;
-        emit("statusSelected", selectedStatus);
+
+        if (!clickedStatus) return;
+
+        selectedStatus.value =
+          selectedStatus.value === clickedStatus ? null : clickedStatus;
+
+        emit("statusSelected", selectedStatus.value);
       },
     },
   },
