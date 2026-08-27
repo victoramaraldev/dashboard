@@ -14,21 +14,21 @@ const emit = defineEmits<{
   <v-row>
     <v-col cols="12" md="6">
       <v-text-field
-        v-model="props.startDate"
+        :model-value="props.startDate"
         label="Data Inicial"
         type="date"
         variant="outlined"
-        @update:modelValue="emit('update:startDate', $event)"
+        @update:model-value="emit('update:startDate', $event)"
       />
     </v-col>
 
     <v-col cols="12" md="6">
       <v-text-field
-        v-model="props.endDate"
+        :model-value="props.endDate"
         label="Data Final"
         type="date"
         variant="outlined"
-        @update:modelValue="emit('update:endDate', $event)"
+        @update:model-value="emit('update:endDate', $event)"
       />
     </v-col>
   </v-row>

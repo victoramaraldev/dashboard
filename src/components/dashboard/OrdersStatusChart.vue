@@ -1,13 +1,28 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import type { ApexOptions } from "apexcharts";
-import type { OrderStatus } from "@/types/dashboard.types";
+import type { OrderStatus, OrderStatusName } from "@/types/dashboard.types";
 
 const props = defineProps<{ data: OrderStatus[] }>();
 
+const emit = defineEmits<{
+  statusSelected: [status: OrderStatusName | null];
+}>();
+
 const labels = ref(props.data.map((item) => item.status));
+
 const chartOptions = computed<ApexOptions>(() => ({
-  chart: { fontFamily: "Roboto, sans-serif" },
+  chart: {
+    fontFamily: "Roboto, sans-serif",
+    events: {
+      dataPointSelection: (_event, _chartContext, config) => {
+        const selectedStatus = config
+          ? props.data[config.dataPointIndex].status
+          : null;
+        emit("statusSelected", selectedStatus);
+      },
+    },
+  },
   labels: labels.value,
   colors: ["#E7A21A", "#12A474", "#D64D5B"],
   dataLabels: { enabled: false },

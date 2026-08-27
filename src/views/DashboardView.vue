@@ -6,8 +6,11 @@ import OrdersStatusChart from "@/components/dashboard/OrdersStatusChart.vue";
 import RecentOrdersTable from "@/components/dashboard/RecentOrdersTable.vue";
 import Filter from "@/components/filters/Filters.vue";
 import { getDashboardData } from "@/services/dashboard.service";
-import type { DashboardData } from "@/types/dashboard.types";
-import type { DashboardFilters } from "@/types/dashboard.types";
+import type {
+  DashboardData,
+  DashboardFilters,
+  OrderStatusName,
+} from "@/types/dashboard.types";
 
 const dashboard = ref<DashboardData | null>(null);
 const loading = ref(false);
@@ -27,6 +30,15 @@ const formattedUpdate = computed(
 );
 
 async function applyFilters(filtros: DashboardFilters) {
+  await loadDashboard(filtros);
+}
+
+async function applyStatusFilter(status: OrderStatusName | null) {
+  const filtros: DashboardFilters = {
+    startDate: "",
+    endDate: "",
+    status,
+  };
   await loadDashboard(filtros);
 }
 
@@ -71,7 +83,7 @@ onMounted(loadDashboard);
       </div>
     </div>
 
-    <Filter @apply="applyFilters"/>
+    <Filter @apply="applyFilters" />
 
     <v-alert
       v-if="error"
@@ -139,7 +151,9 @@ onMounted(loadDashboard);
           ><OrdersBarChart :data="dashboard.monthlyOrders"
         /></v-col>
         <v-col cols="12" lg="4"
-          ><OrdersStatusChart :data="dashboard.orderStatuses"
+          ><OrdersStatusChart
+            :data="dashboard.orderStatuses"
+            @status-selected="applyStatusFilter"
         /></v-col>
       </v-row>
 
