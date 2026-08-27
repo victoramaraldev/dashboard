@@ -10,6 +10,22 @@ export function getDashboardData(filtros?: DateFilter): Promise<DashboardData> {
   const delay = 500 + Math.floor(Math.random() * 501);
 
   return new Promise((resolve) => {
-    window.setTimeout(() => resolve(structuredClone(dashboardMock)), delay);
+    window.setTimeout(() => {
+      const data = structuredClone(dashboardMock);
+
+      if (filtros?.dataInicial || filtros?.dataFinal) {
+        data.recentOrders = data.recentOrders.filter((order) => {
+          const depoisDaInicial =
+            !filtros.dataInicial || order.date >= filtros.dataInicial;
+
+          const antesDaFinal =
+            !filtros.dataFinal || order.date <= filtros.dataFinal;
+
+          return depoisDaInicial && antesDaFinal;
+        });
+      }
+
+      resolve(data);
+    }, delay);
   });
 }

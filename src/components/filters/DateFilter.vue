@@ -33,11 +33,16 @@ function limparFiltros() {
   dataInicial.value = "";
   dataFinal.value = "";
   filtroSelecionado.value = null;
+
+  emit("aplicar-filtros", {
+    dataInicial: "",
+    dataFinal: "",
+  });
 }
 
 emit("aplicar-filtros", {
-  dataInicial: dataInicial.value,
-  dataFinal: dataFinal.value,
+  dataInicial: "",
+  dataFinal: "",
 });
 </script>
 
@@ -51,6 +56,7 @@ emit("aplicar-filtros", {
             :items="opcoesFiltros"
             label="Filtro"
             variant="outlined"
+            density="comfortable"
             hide-details
             clearable
           />
@@ -63,6 +69,7 @@ emit("aplicar-filtros", {
               label="Data Inicial"
               type="date"
               variant="outlined"
+              density="comfortable"
               hide-details
               clearable
             />
@@ -74,6 +81,7 @@ emit("aplicar-filtros", {
               label="Data Final"
               type="date"
               variant="outlined"
+              density="comfortable"
               hide-details
               clearable
             />

@@ -39,7 +39,7 @@ async function loadDashboard(filtros?: DateFilter) {
   error.value = "";
   try {
     dashboard.value = await getDashboardData(filtros);
-    if (!lastUpdate.value) lastUpdate.value = new Date();
+    lastUpdate.value = new Date();
   } catch {
     error.value = "Não foi possível carregar os dados. Tente novamente.";
   } finally {
