@@ -4,14 +4,10 @@ import SummaryCard from "@/components/dashboard/SummaryCard.vue";
 import OrdersBarChart from "@/components/dashboard/OrdersBarChart.vue";
 import OrdersStatusChart from "@/components/dashboard/OrdersStatusChart.vue";
 import RecentOrdersTable from "@/components/dashboard/RecentOrdersTable.vue";
-import DateFilter from "@/components/filters/DateFilter.vue";
+import Filter from "@/components/filters/Filters.vue";
 import { getDashboardData } from "@/services/dashboard.service";
 import type { DashboardData } from "@/types/dashboard.types";
-
-type DateFilter = {
-  dataInicial: string;
-  dataFinal: string;
-};
+import type { DashboardFilters } from "@/types/dashboard.types";
 
 const dashboard = ref<DashboardData | null>(null);
 const loading = ref(false);
@@ -30,11 +26,11 @@ const formattedUpdate = computed(
     }) ?? "—",
 );
 
-async function aplicarFiltro(filtros: DateFilter) {
+async function applyFilters(filtros: DashboardFilters) {
   await loadDashboard(filtros);
 }
 
-async function loadDashboard(filtros?: DateFilter) {
+async function loadDashboard(filtros?: DashboardFilters) {
   loading.value = true;
   error.value = "";
   try {
@@ -75,7 +71,7 @@ onMounted(loadDashboard);
       </div>
     </div>
 
-    <DateFilter @aplicar-filtros="aplicarFiltro"/>
+    <Filter @apply="applyFilters"/>
 
     <v-alert
       v-if="error"

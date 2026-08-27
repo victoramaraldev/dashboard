@@ -1,26 +1,22 @@
 import { dashboardMock } from "@/mocks/dashboard.mock";
-import type { DashboardData } from "@/types/dashboard.types";
+import type { DashboardData, DashboardFilters } from "@/types/dashboard.types";
 
-type DateFilter = {
-  dataInicial: string;
-  dataFinal: string;
-  status: string | null;
-};
-
-export function getDashboardData(filtros?: DateFilter): Promise<DashboardData> {
+export function getDashboardData(
+  filtros?: DashboardFilters,
+): Promise<DashboardData> {
   const delay = 500 + Math.floor(Math.random() * 501);
 
   return new Promise((resolve) => {
     window.setTimeout(() => {
       const data = structuredClone(dashboardMock);
 
-      if (filtros?.dataInicial || filtros?.dataFinal) {
+      if (filtros?.startDate || filtros?.endDate) {
         data.recentOrders = data.recentOrders.filter((order) => {
           const depoisDaInicial =
-            !filtros.dataInicial || order.date >= filtros.dataInicial;
+            !filtros.startDate || order.date >= filtros.startDate;
 
           const antesDaFinal =
-            !filtros.dataFinal || order.date <= filtros.dataFinal;
+            !filtros.endDate || order.date <= filtros.endDate;
 
           return depoisDaInicial && antesDaFinal;
         });

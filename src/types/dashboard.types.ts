@@ -31,3 +31,9 @@ export interface DashboardData {
   orderStatuses: OrderStatus[]
   recentOrders: RecentOrder[]
 }
+
+export interface DashboardFilters {
+  startDate: string;
+  endDate: string;
+  status: OrderStatusName | null;
+}
